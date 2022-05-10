@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[Recipe]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(MAX) NOT NULL,
+	[Description] NVARCHAR(MAX) NULL,
+	[Process] NVARCHAR(MAX) NULL
+)
