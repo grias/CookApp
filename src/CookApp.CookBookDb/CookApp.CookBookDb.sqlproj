@@ -59,10 +59,25 @@
     <Folder Include="dbo" />
     <Folder Include="dbo\Tables" />
     <Folder Include="dbo\StoredProcedures" />
+    <Folder Include="dbo\Views" />
+    <Folder Include="dbo\Triggers" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Category.sql" />
     <Build Include="dbo\Tables\Recipe.sql" />
+    <Build Include="dbo\StoredProcedures\spRecipe_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\spRecipe_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\spRecipe_Update.sql" />
+    <Build Include="dbo\StoredProcedures\spCategory_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\spCategory_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\spCategory_Update.sql" />
+    <Build Include="dbo\StoredProcedures\spRecipe_AddCategory.sql" />
+    <Build Include="dbo\StoredProcedures\spRecipe_DeleteCategory.sql" />
+    <Build Include="dbo\StoredProcedures\spCategory_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\spRecipe_GetById.sql" />
+    <Build Include="dbo\StoredProcedures\spCategory_GetById.sql" />
+    <Build Include="dbo\Triggers\trgRecipe_UpdateModifiedDate.sql" />
+    <Build Include="dbo\StoredProcedures\spRecipe_GetPage.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\RecipeCategory.sql" />
