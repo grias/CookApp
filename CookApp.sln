@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookApp.Infrastructure", "src\CookApp.Infrastructure\CookApp.Infrastructure.csproj", "{9EADA0FB-CF63-4249-BF83-D5AA7E0F7B96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{D0AF9222-2004-40A9-B176-C9828E209186}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0AF9222-2004-40A9-B176-C9828E209186}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0AF9222-2004-40A9-B176-C9828E209186}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{9EADA0FB-CF63-4249-BF83-D5AA7E0F7B96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EADA0FB-CF63-4249-BF83-D5AA7E0F7B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EADA0FB-CF63-4249-BF83-D5AA7E0F7B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EADA0FB-CF63-4249-BF83-D5AA7E0F7B96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +55,7 @@ Global
 		{2EACE252-4721-483C-84D1-8A8026AF4534} = {7F099ECC-CB53-49FC-AFC6-478F0BC69392}
 		{80B7A9F2-7DDA-4AB9-9553-A8BC78AC49C7} = {43326A13-7DEE-48B5-81AD-676E310ED351}
 		{D0AF9222-2004-40A9-B176-C9828E209186} = {7F099ECC-CB53-49FC-AFC6-478F0BC69392}
+		{9EADA0FB-CF63-4249-BF83-D5AA7E0F7B96} = {7F099ECC-CB53-49FC-AFC6-478F0BC69392}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8638AF7A-39F4-45D7-AEAA-0F6443BD2F6C}
