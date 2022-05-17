@@ -72,12 +72,16 @@
     <Build Include="dbo\StoredProcedures\spCategory_Insert.sql" />
     <Build Include="dbo\StoredProcedures\spCategory_Update.sql" />
     <Build Include="dbo\StoredProcedures\spRecipe_AddCategory.sql" />
-    <Build Include="dbo\StoredProcedures\spRecipe_DeleteCategory.sql" />
+    <Build Include="dbo\StoredProcedures\spRecipe_RemoveCategory.sql" />
     <Build Include="dbo\StoredProcedures\spCategory_GetAll.sql" />
     <Build Include="dbo\StoredProcedures\spRecipe_GetById.sql" />
     <Build Include="dbo\StoredProcedures\spCategory_GetById.sql" />
     <Build Include="dbo\Triggers\trgRecipe_UpdateModifiedDate.sql" />
     <Build Include="dbo\StoredProcedures\spRecipe_GetPage.sql" />
+    <Build Include="dbo\StoredProcedures\spRecipe_GetPageByCategoryId.sql" />
+    <Build Include="dbo\StoredProcedures\spCategory_GetPage.sql" />
+    <Build Include="dbo\StoredProcedures\spCategory_GetPageByRecipeId.sql" />
+    <Build Include="dbo\StoredProcedures\spCategory_GetAllByRecipeId.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\RecipeCategory.sql" />

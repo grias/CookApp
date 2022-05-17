@@ -14,7 +14,7 @@ public interface IRecipeRepository : IRepositoryBase<Recipe>
 {
     Task<Recipe> InsertAsync(NewRecipe newRecipe);
 
-    Task<List<Recipe>> GetPageByCategoryIdAsync(int categoryId, Pagination pagination);
+    Task<IEnumerable<Recipe>> GetPageByCategoryIdAsync(int categoryId, Pagination pagination);
 
     Task AddRecipeToCategoryAsync(int RecipeId, int CategoryId);
 

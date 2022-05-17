@@ -14,5 +14,5 @@ public interface ICategoryRepository : IRepositoryBase<Category>
 {
     Task<Category> InsertAsync(NewCategory newCategory);
 
-    Task<List<Category>> GetCategoriesOfRecipeByIdAsync(int recipeId);
+    Task<IEnumerable<Category>> GetCategoriesOfRecipeByIdAsync(int recipeId);
 }
