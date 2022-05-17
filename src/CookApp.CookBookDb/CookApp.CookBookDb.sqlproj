@@ -79,6 +79,9 @@
     <Build Include="dbo\Triggers\trgRecipe_UpdateModifiedDate.sql" />
     <Build Include="dbo\StoredProcedures\spRecipe_GetPage.sql" />
     <Build Include="dbo\StoredProcedures\spRecipe_GetPageByCategoryId.sql" />
+    <Build Include="dbo\StoredProcedures\spCategory_GetPage.sql" />
+    <Build Include="dbo\StoredProcedures\spCategory_GetPageByRecipeId.sql" />
+    <Build Include="dbo\StoredProcedures\spCategory_GetAllByRecipeId.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\RecipeCategory.sql" />
