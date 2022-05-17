@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[spRecipe_DeleteCategory]
+﻿CREATE PROCEDURE [dbo].[spRecipe_RemoveCategory]
 	@RecipeId INT,
 	@CategoryId INT
 AS
