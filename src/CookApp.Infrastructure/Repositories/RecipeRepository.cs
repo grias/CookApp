@@ -53,7 +53,8 @@ public class RecipeRepository : IRecipeRepository
     {
         using var db = new SqlConnection(_connectionString);
         await db.ExecuteAsync("spRecipe_Update", new { RecipeId = entity.Id, entity.Name, entity.Description, entity.Process }, commandType: CommandType.StoredProcedure);
-        return entity;
+        // return updated entity or argument?
+        return await GetByIdAsync(entity.Id);
     }
 
     public async Task<Recipe> DeleteAsync(int id)
