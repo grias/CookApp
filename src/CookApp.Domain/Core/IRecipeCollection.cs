@@ -14,9 +14,9 @@ public interface IRecipeCollection
 {
     public Task<RecipeWithBriefCategories> GetRecipeWithCategoriesAsync(int recipeId);
 
-    public Task<List<BriefRecipeWithBriefCategories>> GetBriefRecipesWithBriefCategoriesAsync(Pagination pagination);
+    public Task<IEnumerable<BriefRecipeWithBriefCategories>> GetBriefRecipesWithBriefCategoriesAsync(Pagination pagination);
 
-    public Task<List<BriefRecipeWithBriefCategories>> GetBriefRecipesWithBriefCategoriesByCategoryIdAsync(int categoryId, Pagination pagination);
+    public Task<IEnumerable<BriefRecipeWithBriefCategories>> GetBriefRecipesWithBriefCategoriesByCategoryIdAsync(int categoryId, Pagination pagination);
     
     public Task<Recipe> AddRecipeAsync(NewRecipe newRecipe);
 
