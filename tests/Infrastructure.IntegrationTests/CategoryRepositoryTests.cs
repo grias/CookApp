@@ -7,6 +7,7 @@ using CookApp.Infrastructure.Repositories;
 using CookApp.Domain.Models.DbEntities;
 using CookApp.Domain.Models.CreatedEntities;
 using CookApp.Domain.UtilityClasses;
+using CookApp.Domain.DataAccessInterfaces;
 using Xunit;
 using Dapper;
 using Microsoft.Data.SqlClient;
@@ -19,9 +20,12 @@ public class CategoryRepositoryTests
 
     private readonly string _connectionString;
 
+    private readonly ICategoryRepository _categoryRepository;
+
     public CategoryRepositoryTests()
     {
         _connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") ?? "";
+        _categoryRepository = new CategoryRepository(_connectionString);
     }
 
     private readonly List<Category> _fakeCategories = new List<Category>()
@@ -73,12 +77,11 @@ public class CategoryRepositoryTests
     public async void GetSingleOrDefaultAsync_ExistingId_ReturnsCorrectCategory()
     {
         // Arrange
-        var categoryRepository = new CategoryRepository(_connectionString);
         await ClearCategoryTable();
         var ids = await PopulateCategoryTableByFakeData();
 
         // Act
-        var category = await categoryRepository.GetSingleOrDefaultAsync(ids[0]);
+        var category = await _categoryRepository.GetSingleOrDefaultAsync(ids[0]);
 
         // Assert
         Assert.NotNull(category);
@@ -91,12 +94,11 @@ public class CategoryRepositoryTests
     public async void GetSingleOrDefaultAsync_NonExistingId_ReturnsNull()
     {
         // Arrange
-        var categoryRepository = new CategoryRepository(_connectionString);
         await ClearCategoryTable();
         var ids = await PopulateCategoryTableByFakeData();
 
         // Act
-        var category = await categoryRepository.GetSingleOrDefaultAsync(ids.Last() + 1);
+        var category = await _categoryRepository.GetSingleOrDefaultAsync(ids.Last() + 1);
 
         // Assert
         Assert.Null(category);
@@ -106,12 +108,11 @@ public class CategoryRepositoryTests
     public async void GetSingleOrDefaultAsync_InvalidId_ReturnsNull()
     {
         // Arrange
-        var categoryRepository = new CategoryRepository(_connectionString);
         await ClearCategoryTable();
         await PopulateCategoryTableByFakeData();
 
         // Act
-        var category = await categoryRepository.GetSingleOrDefaultAsync(-1);
+        var category = await _categoryRepository.GetSingleOrDefaultAsync(-1);
 
         // Assert
         Assert.Null(category);
@@ -121,12 +122,11 @@ public class CategoryRepositoryTests
     public async void GetPageAsync_All_ReturnsAllCategories()
     {
         // Arrange
-        var categoryRepository = new CategoryRepository(_connectionString);
         await ClearCategoryTable();
         await PopulateCategoryTableByFakeData();
 
         // Act
-        var categories = (await categoryRepository.GetPageAsync(Pagination.All)).ToList();
+        var categories = (await _categoryRepository.GetPageAsync(Pagination.All)).ToList();
 
         // Assert
         Assert.Equal(_fakeCategories.Count, categories.Count);
@@ -136,7 +136,6 @@ public class CategoryRepositoryTests
     public async void GetPageAsync_SecondPage_ReturnsCorrectCategories()
     {
         // Arrange
-        var categoryRepository = new CategoryRepository(_connectionString);
         await ClearCategoryTable();
         await PopulateCategoryTableByFakeData();
         var sortedFakeCategories = _fakeCategories.OrderBy(c => c.Name).ToList();
@@ -145,7 +144,7 @@ public class CategoryRepositoryTests
         var secondPage = new Pagination(pageNumber, pageSize);
 
         // Act
-        var categories = (await categoryRepository.GetPageAsync(secondPage)).ToList();
+        var categories = (await _categoryRepository.GetPageAsync(secondPage)).ToList();
 
         // Assert
         Assert.Equal(2, categories.Count);
@@ -157,12 +156,11 @@ public class CategoryRepositoryTests
     public async void GetPageAsync_NonexistentPage_ReturnsEmptyCollection()
     {
         // Arrange
-        var categoryRepository = new CategoryRepository(_connectionString);
         await ClearCategoryTable();
         await PopulateCategoryTableByFakeData();
 
         // Act
-        var categories = (await categoryRepository.GetPageAsync(new Pagination(int.MaxValue, 1))).ToList();
+        var categories = (await _categoryRepository.GetPageAsync(new Pagination(int.MaxValue, 1))).ToList();
 
         // Assert
         Assert.Empty(categories);
@@ -172,12 +170,11 @@ public class CategoryRepositoryTests
     public async void InsertAsync_newCategory_ReturnsInsertedCategory()
     {
         // Arrange
-        var categoryRepository = new CategoryRepository(_connectionString);
         await ClearCategoryTable();
 
         // Act
         var category = new NewCategory("CorrectName", "CorrectDescription");
-        var insertedCategory = await categoryRepository.InsertAsync(category);
+        var insertedCategory = await _categoryRepository.InsertAsync(category);
 
         // Assert
         Assert.Equal(category.Name, insertedCategory.Name);
@@ -188,12 +185,11 @@ public class CategoryRepositoryTests
     public async void InsertAsync_newCategory_InsertsCorrectCategory()
     {
         // Arrange
-        var categoryRepository = new CategoryRepository(_connectionString);
         await ClearCategoryTable();
 
         // Act
         var category = new NewCategory("CorrectName", "CorrectDescription");
-        await categoryRepository.InsertAsync(category);
+        await _categoryRepository.InsertAsync(category);
 
         // Assert
         
@@ -208,13 +204,12 @@ public class CategoryRepositoryTests
     public async void InsertAsync_ExistingName_ThrowsSqlException()
     {
         // Arrange
-        var categoryRepository = new CategoryRepository(_connectionString);
         await ClearCategoryTable();
         await PopulateCategoryTableByFakeData();
 
         // Act
         var category = new NewCategory(_fakeCategories[0].Name, "CorrectDescription");
-        var action = async () => await categoryRepository.InsertAsync(category);
+        var action = async () => await _categoryRepository.InsertAsync(category);
 
         // Assert
         await Assert.ThrowsAsync<SqlException>(action);
@@ -224,13 +219,12 @@ public class CategoryRepositoryTests
     public async void UpdateAsync_ExistingCategory_UpdatesCategory()
     {
         // Arrange
-        var categoryRepository = new CategoryRepository(_connectionString);
         await ClearCategoryTable();
         var ids = await PopulateCategoryTableByFakeData();
 
         // Act
         var categoryUpdate = new Category(ids[0], "CorrectName", "CorrectDescription");
-        await categoryRepository.UpdateAsync(categoryUpdate);
+        await _categoryRepository.UpdateAsync(categoryUpdate);
 
         // Assert
         using var db = new SqlConnection(_connectionString);
@@ -246,13 +240,12 @@ public class CategoryRepositoryTests
     public async void UpdateAsync_ExistingCategory_ReturnsUpdatedCategory()
     {
         // Arrange
-        var categoryRepository = new CategoryRepository(_connectionString);
         await ClearCategoryTable();
         var ids = await PopulateCategoryTableByFakeData();
 
         // Act
         var categoryUpdate = new Category(ids[0], "CorrectName", "CorrectDescription");
-        var updatedCategory = await categoryRepository.UpdateAsync(categoryUpdate);
+        var updatedCategory = await _categoryRepository.UpdateAsync(categoryUpdate);
 
         // Assert
         Assert.Equal(categoryUpdate.Id, updatedCategory.Id);
@@ -264,13 +257,12 @@ public class CategoryRepositoryTests
     public async void UpdateAsync_NonExistingCategory_ThrowsInvalidOperationException()
     {
         // Arrange
-        var categoryRepository = new CategoryRepository(_connectionString);
         await ClearCategoryTable();
         var ids = await PopulateCategoryTableByFakeData();
 
         // Act
         var categoryUpdate = new Category(ids.Last() + 1, "CorrectName", "CorrectDescription");
-        var action = async () => await categoryRepository.UpdateAsync(categoryUpdate);
+        var action = async () => await _categoryRepository.UpdateAsync(categoryUpdate);
 
         // Assert
         await Assert.ThrowsAsync<InvalidOperationException>(action);
@@ -280,15 +272,31 @@ public class CategoryRepositoryTests
     public async void UpdateAsync_ExistingName_ThrowsSqlException()
     {
         // Arrange
-        var categoryRepository = new CategoryRepository(_connectionString);
         await ClearCategoryTable();
         var ids = await PopulateCategoryTableByFakeData();
 
         // Act
         var categoryUpdate = new Category(ids[0], _fakeCategories[1].Name, "CorrectDescription");
-        var action = async () => await categoryRepository.UpdateAsync(categoryUpdate);
+        var action = async () => await _categoryRepository.UpdateAsync(categoryUpdate);
 
         // Assert
         await Assert.ThrowsAsync<SqlException>(action);
+    }
+
+    [Fact]
+    public async void DeleteAsync_ExistingCategory_DeletesCategory()
+    {
+        // Arrange
+        await ClearCategoryTable();
+        var ids = await PopulateCategoryTableByFakeData();
+
+        // Act
+        await _categoryRepository.DeleteAsync(ids[0]);
+
+        // Assert
+        using var db = new SqlConnection(_connectionString);
+        var deletedCategory = await db.QuerySingleOrDefaultAsync<Category>(
+            "SELECT * FROM Category WHERE Id = @Id", new { Id = ids[0] });
+        Assert.Null(deletedCategory);
     }
 }
