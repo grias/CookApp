@@ -19,6 +19,6 @@ BEGIN
 	SELECT * FROM [Category]
 	INNER JOIN [RecipeCategory] ON [Category].[Id] = [RecipeCategory].[CategoryId]
 	WHERE [RecipeCategory].[RecipeId] = @RecipeId
-	ORDER BY [Name] DESC
+	ORDER BY [Name] ASC
 	OFFSET @SkipRows ROWS FETCH NEXT @PageSize ROWS ONLY;
 END

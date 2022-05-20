@@ -16,6 +16,6 @@ BEGIN
 	DECLARE @SkipRows INT = (@PageNumber - 1) * @PageSize;
 
 	SELECT * FROM Recipe
-	ORDER BY ModifiedDate DESC
+	ORDER BY ModifiedDate ASC
 	OFFSET @SkipRows ROWS FETCH NEXT @PageSize ROWS ONLY;
 END

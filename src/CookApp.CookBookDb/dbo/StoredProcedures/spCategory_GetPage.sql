@@ -16,6 +16,6 @@ BEGIN
 	DECLARE @SkipRows INT = (@PageNumber - 1) * @PageSize;
 
 	SELECT * FROM [Category]
-	ORDER BY [Name] DESC
+	ORDER BY [Name] ASC
 	OFFSET @SkipRows ROWS FETCH NEXT @PageSize ROWS ONLY;
 END

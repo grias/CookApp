@@ -19,6 +19,6 @@ BEGIN
 	SELECT Id, Name, Description, Process FROM Recipe
 	INNER JOIN RecipeCategory ON Recipe.Id = RecipeCategory.RecipeId
 	WHERE RecipeCategory.CategoryId = @CategoryId
-	ORDER BY ModifiedDate DESC
+	ORDER BY ModifiedDate ASC
 	OFFSET @SkipRows ROWS FETCH NEXT @PageSize ROWS ONLY;
 END
