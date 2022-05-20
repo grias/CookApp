@@ -26,26 +26,26 @@ public class RecipeCollection : IRecipeCollection
 
     public async Task<RecipeWithBriefCategories> GetRecipeWithCategoriesAsync(int recipeId)
     {
-        var recipe = await _recipeRepository.GetByIdAsync(recipeId);
+        var recipe = await _recipeRepository.GetSingleOrDefaultAsync(recipeId);
         var categories = await _categoryRepository.GetCategoriesOfRecipeByIdAsync(recipeId);
 
         return new RecipeWithBriefCategories(recipe, _dataMapper.ToBrief(categories));
     }
 
-    public async Task<List<BriefRecipeWithBriefCategories>> GetBriefRecipesWithBriefCategoriesAsync(Pagination pagination)
+    public async Task<IEnumerable<BriefRecipeWithBriefCategories>> GetBriefRecipesWithBriefCategoriesAsync(Pagination pagination)
     {
 
         var recipes = await _recipeRepository.GetPageAsync(pagination);
         return await AttachBriefCategoriesToBriefRecipes(_dataMapper.ToBrief(recipes));
     }
 
-    public async Task<List<BriefRecipeWithBriefCategories>> GetBriefRecipesWithBriefCategoriesByCategoryIdAsync(int categoryId, Pagination pagination)
+    public async Task<IEnumerable<BriefRecipeWithBriefCategories>> GetBriefRecipesWithBriefCategoriesByCategoryIdAsync(int categoryId, Pagination pagination)
     {
         var recipes = await _recipeRepository.GetPageByCategoryIdAsync(categoryId, pagination);
         return await AttachBriefCategoriesToBriefRecipes(_dataMapper.ToBrief(recipes));
     }
 
-    private async Task<List<BriefRecipeWithBriefCategories>> AttachBriefCategoriesToBriefRecipes(IEnumerable<BriefRecipe> briefRecepies)
+    private async Task<IEnumerable<BriefRecipeWithBriefCategories>> AttachBriefCategoriesToBriefRecipes(IEnumerable<BriefRecipe> briefRecepies)
     {
         async Task<BriefRecipeWithBriefCategories> CreateBriefRecipeWithCategoriesAsync(BriefRecipe recipe)
         {
@@ -58,9 +58,7 @@ public class RecipeCollection : IRecipeCollection
          * TODO: Optimize calls to database
          */
 
-        var briefRecipesWithCategories = await Task.WhenAll(briefRecepies.Select(recipe => CreateBriefRecipeWithCategoriesAsync(recipe)));
-
-        return briefRecipesWithCategories.ToList();
+        return await Task.WhenAll(briefRecepies.Select(recipe => CreateBriefRecipeWithCategoriesAsync(recipe)));
     }
 
     public async Task<Recipe> AddRecipeAsync(NewRecipe newRecipe) => await _recipeRepository.InsertAsync(newRecipe);

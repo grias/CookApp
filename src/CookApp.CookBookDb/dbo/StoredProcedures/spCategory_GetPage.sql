@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[spRecipe_GetPage]
+﻿CREATE PROCEDURE [dbo].[spCategory_GetPage]
 	@PageNumber int = 0,
 	@PageSize int = 10
 AS
@@ -15,7 +15,7 @@ BEGIN
 	
 	DECLARE @SkipRows INT = (@PageNumber - 1) * @PageSize;
 
-	SELECT * FROM Recipe
-	ORDER BY ModifiedDate ASC
+	SELECT * FROM [Category]
+	ORDER BY [Name] ASC
 	OFFSET @SkipRows ROWS FETCH NEXT @PageSize ROWS ONLY;
 END

@@ -18,9 +18,9 @@ public class CategoryCollection : ICategoryCollection
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<IEnumerable<Category>> GetAll() => await _categoryRepository.GetPageAsync(Pagination.All());
+    public async Task<IEnumerable<Category>> GetAll() => await _categoryRepository.GetPageAsync(Pagination.All);
 
-    public async Task<Category> GetById(int id) => await _categoryRepository.GetByIdAsync(id);
+    public async Task<Category> GetById(int id) => await _categoryRepository.GetSingleOrDefaultAsync(id);
 
     public Task<Category> Add(Category category) => throw new NotImplementedException();
 

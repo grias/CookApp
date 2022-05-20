@@ -8,6 +8,9 @@ namespace CookApp.Domain.UtilityClasses;
 
 public class Pagination
 {
+
+    public static Pagination All { get { return new Pagination(1, int.MaxValue); } }
+
     public int PageNumber { get; init; }
     public int PageSize { get; init; }
 
@@ -15,10 +18,5 @@ public class Pagination
     {
         PageNumber = pageNumber;
         PageSize = pageSize;
-    }
-
-    public static Pagination All()
-    {
-        return new Pagination(1, int.MaxValue);
     }
 }
