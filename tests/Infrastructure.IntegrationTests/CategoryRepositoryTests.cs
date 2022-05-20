@@ -70,7 +70,7 @@ public class CategoryRepositoryTests
     }
 
     [Fact]
-    public async void GetByIdAsync_ExistingId_ReturnsCorrectCategory()
+    public async void GetSingleOrDefaultAsync_ExistingId_ReturnsCorrectCategory()
     {
         // Arrange
         var categoryRepository = new CategoryRepository(_connectionString);
@@ -78,16 +78,17 @@ public class CategoryRepositoryTests
         var ids = await PopulateCategoryTableByFakeData();
 
         // Act
-        var category = await categoryRepository.GetByIdAsync(ids[0]);
+        var category = await categoryRepository.GetSingleOrDefaultAsync(ids[0]);
 
         // Assert
-        Assert.Equal(ids[0], category.Id);
+        Assert.NotNull(category);
+        Assert.Equal(ids[0], category!.Id);
         Assert.Equal(_fakeCategories[0].Name, category.Name);
         Assert.Equal(_fakeCategories[0].Description, category.Description);
     }
 
     [Fact]
-    public async void GetByIdAsync_NonExistingId_ReturnsNull()
+    public async void GetSingleOrDefaultAsync_NonExistingId_ReturnsNull()
     {
         // Arrange
         var categoryRepository = new CategoryRepository(_connectionString);
@@ -95,14 +96,14 @@ public class CategoryRepositoryTests
         var ids = await PopulateCategoryTableByFakeData();
 
         // Act
-        var category = await categoryRepository.GetByIdAsync(ids.Last() + 1);
+        var category = await categoryRepository.GetSingleOrDefaultAsync(ids.Last() + 1);
 
         // Assert
         Assert.Null(category);
     }
 
     [Fact]
-    public async void GetByIdAsync_InvalidId_ReturnsNull()
+    public async void GetSingleOrDefaultAsync_InvalidId_ReturnsNull()
     {
         // Arrange
         var categoryRepository = new CategoryRepository(_connectionString);
@@ -110,7 +111,7 @@ public class CategoryRepositoryTests
         await PopulateCategoryTableByFakeData();
 
         // Act
-        var category = await categoryRepository.GetByIdAsync(-1);
+        var category = await categoryRepository.GetSingleOrDefaultAsync(-1);
 
         // Assert
         Assert.Null(category);
@@ -260,7 +261,7 @@ public class CategoryRepositoryTests
     }
 
     [Fact]
-    public async void UpdateAsync_NonExistingCategory_ReturnsNull()
+    public async void UpdateAsync_NonExistingCategory_ThrowsInvalidOperationException()
     {
         // Arrange
         var categoryRepository = new CategoryRepository(_connectionString);
@@ -269,10 +270,10 @@ public class CategoryRepositoryTests
 
         // Act
         var categoryUpdate = new Category(ids.Last() + 1, "CorrectName", "CorrectDescription");
-        var updatedCategory = await categoryRepository.UpdateAsync(categoryUpdate);
+        var action = async () => await categoryRepository.UpdateAsync(categoryUpdate);
 
         // Assert
-        Assert.Null(updatedCategory);
+        await Assert.ThrowsAsync<InvalidOperationException>(action);
     }
 
     [Fact]

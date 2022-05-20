@@ -23,10 +23,16 @@ public class RecipeRepository : IRecipeRepository
         _connectionString = connectionString;
     }
 
-    public async Task<Recipe> GetByIdAsync(int id)
+    public async Task<Recipe?> GetSingleOrDefaultAsync(int id)
     {
         using var db = new SqlConnection(_connectionString);
         return await db.QuerySingleOrDefaultAsync<Recipe>("spRecipe_GetById", new { RecipeId = id }, commandType: CommandType.StoredProcedure);
+    }
+
+    public async Task<Recipe> GetSingleAsync(int id)
+    {
+        using var db = new SqlConnection(_connectionString);
+        return await db.QuerySingleAsync<Recipe>("spRecipe_GetById", new { RecipeId = id }, commandType: CommandType.StoredProcedure);
     }
 
     public async Task<IEnumerable<Recipe>> GetPageAsync(Pagination pagination)
@@ -52,7 +58,7 @@ public class RecipeRepository : IRecipeRepository
         using var db = new SqlConnection(_connectionString);
         await db.ExecuteAsync("spRecipe_Insert", parameters, commandType: CommandType.StoredProcedure);
 
-        return await GetByIdAsync(parameters.Get<int>("Id"));
+        return await GetSingleAsync(parameters.Get<int>("Id"));
     }
 
     public async Task<Recipe> UpdateAsync(Recipe entity)
@@ -60,13 +66,13 @@ public class RecipeRepository : IRecipeRepository
         using var db = new SqlConnection(_connectionString);
         await db.ExecuteAsync("spRecipe_Update", new { RecipeId = entity.Id, entity.Name, entity.Description, entity.Process }, commandType: CommandType.StoredProcedure);
         // return updated entity or argument?
-        return await GetByIdAsync(entity.Id);
+        return await GetSingleAsync(entity.Id);
     }
 
     public async Task<Recipe> DeleteAsync(int id)
     {
         using var db = new SqlConnection(_connectionString);
-        var recipe = await GetByIdAsync(id);
+        var recipe = await GetSingleAsync(id);
         await db.ExecuteAsync("spRecipe_Delete", new { RecipeId = id }, commandType: CommandType.StoredProcedure);
         return recipe;
     }

@@ -26,7 +26,7 @@ public class RecipeCollection : IRecipeCollection
 
     public async Task<RecipeWithBriefCategories> GetRecipeWithCategoriesAsync(int recipeId)
     {
-        var recipe = await _recipeRepository.GetByIdAsync(recipeId);
+        var recipe = await _recipeRepository.GetSingleOrDefaultAsync(recipeId);
         var categories = await _categoryRepository.GetCategoriesOfRecipeByIdAsync(recipeId);
 
         return new RecipeWithBriefCategories(recipe, _dataMapper.ToBrief(categories));

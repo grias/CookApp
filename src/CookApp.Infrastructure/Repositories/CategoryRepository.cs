@@ -21,10 +21,16 @@ public class CategoryRepository : ICategoryRepository
         _connectionString = connectionString;
     }
 
-    public async Task<Category> GetByIdAsync(int id)
+    public async Task<Category?> GetSingleOrDefaultAsync(int id)
     {
         using var db = new SqlConnection(_connectionString);
         return await db.QuerySingleOrDefaultAsync<Category>("spCategory_GetById", new { CategoryId = id }, commandType: CommandType.StoredProcedure);
+    }
+
+    public async Task<Category> GetSingleAsync(int id)
+    {
+        using var db = new SqlConnection(_connectionString);
+        return await db.QuerySingleAsync<Category>("spCategory_GetById", new { CategoryId = id }, commandType: CommandType.StoredProcedure);
     }
 
     public async Task<IEnumerable<Category>> GetPageAsync(Pagination pagination)
@@ -42,21 +48,21 @@ public class CategoryRepository : ICategoryRepository
 
         using var db = new SqlConnection(_connectionString);
         await db.ExecuteAsync("spCategory_Insert", parameters, commandType: CommandType.StoredProcedure);
-        
-        return await GetByIdAsync(parameters.Get<int>("Id"));
+
+        return await GetSingleAsync(parameters.Get<int>("Id"));
     }
 
     public async Task<Category> UpdateAsync(Category entity)
     {
         using var db = new SqlConnection(_connectionString);
-        await db.ExecuteAsync("spCategory_Update", new { CategoryId = entity.Id, entity.Name, entity.Description }, commandType: CommandType.StoredProcedure);
+        var rowsAffected = await db.ExecuteAsync("spCategory_Update", new { CategoryId = entity.Id, entity.Name, entity.Description }, commandType: CommandType.StoredProcedure);
         // return updated entity or argument?
-        return await GetByIdAsync(entity.Id);
+        return await GetSingleAsync(entity.Id);
     }
     public async Task<Category> DeleteAsync(int id)
     {
         using var db = new SqlConnection(_connectionString);
-        var category = await GetByIdAsync(id);
+        var category = await GetSingleAsync(id);
         await db.ExecuteAsync("spCategory_Delete", new { CategoryId = id }, commandType: CommandType.StoredProcedure);
         return category;
     }

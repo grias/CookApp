@@ -10,7 +10,9 @@ namespace CookApp.Domain.DataAccessInterfaces;
 
 public interface IRepositoryBase<T> where T : EntityBase
 {
-    Task<T> GetByIdAsync(int id);
+    Task<T?> GetSingleOrDefaultAsync(int id);
+
+    Task<T> GetSingleAsync(int id);
 
     Task<IEnumerable<T>> GetPageAsync(Pagination pagination);
 
