@@ -86,4 +86,7 @@
   <ItemGroup>
     <Build Include="dbo\Tables\RecipeCategory.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="CookApp.CookBookDbTest.publish.xml" />
+  </ItemGroup>
 </Project>
