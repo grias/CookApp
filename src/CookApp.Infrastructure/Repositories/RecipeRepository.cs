@@ -43,10 +43,16 @@ public class RecipeRepository : IRecipeRepository
 
     public async Task<Recipe> InsertAsync(NewRecipe newRecipe)
     {
-        using var db = new SqlConnection(_connectionString);
-        var id = await db.QuerySingleAsync<int>("spRecipe_Insert", new { newRecipe.Name, newRecipe.Description, newRecipe.Process }, commandType: CommandType.StoredProcedure);
+        var parameters = new DynamicParameters();
+        parameters.Add("Name", newRecipe.Name);
+        parameters.Add("Description", newRecipe.Description);
+        parameters.Add("Process", newRecipe.Process);
+        parameters.Add("Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-        return new Recipe(id, newRecipe.Name, newRecipe.Description, newRecipe.Process);
+        using var db = new SqlConnection(_connectionString);
+        await db.ExecuteAsync("spRecipe_Insert", parameters, commandType: CommandType.StoredProcedure);
+
+        return await GetByIdAsync(parameters.Get<int>("Id"));
     }
 
     public async Task<Recipe> UpdateAsync(Recipe entity)

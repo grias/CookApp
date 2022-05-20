@@ -35,9 +35,15 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task<Category> InsertAsync(NewCategory newCategory)
     {
+        var parameters = new DynamicParameters();
+        parameters.Add("Name", newCategory.Name);
+        parameters.Add("Description", newCategory.Description);
+        parameters.Add("Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
         using var db = new SqlConnection(_connectionString);
-        var id = await db.QuerySingleAsync<int>("spCategory_Insert", new { Name = newCategory.Name }, commandType: CommandType.StoredProcedure);
-        return await GetByIdAsync(id);
+        await db.ExecuteAsync("spCategory_Insert", parameters, commandType: CommandType.StoredProcedure);
+        
+        return await GetByIdAsync(parameters.Get<int>("Id"));
     }
 
     public async Task<Category> UpdateAsync(Category entity)
