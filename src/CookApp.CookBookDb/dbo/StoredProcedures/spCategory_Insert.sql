@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[spCategory_Insert]
-	@Name NVARCHAR(MAX),
+	@Name NVARCHAR(50),
 	@Description NVARCHAR(MAX) = NULL,
 	@Id INT OUTPUT
 AS
