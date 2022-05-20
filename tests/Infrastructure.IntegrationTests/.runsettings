@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+    <RunConfiguration>
+        <EnvironmentVariables>
+            <CONNECTION_STRING>Data Source=ALEX-LAPTOP;Database=CookApp.CookBookDbTest;Integrated Security=True;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False</YOUR_VARIABLE>
+        </EnvironmentVariables>
+    </RunConfiguration>
+</RunSettings>
