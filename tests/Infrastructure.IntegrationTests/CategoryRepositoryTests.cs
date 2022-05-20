@@ -299,4 +299,34 @@ public class CategoryRepositoryTests
             "SELECT * FROM Category WHERE Id = @Id", new { Id = ids[0] });
         Assert.Null(deletedCategory);
     }
+
+    [Fact]
+    public async void DeleteAsync_ExistingCategory_ReturnsDeletedCategory()
+    {
+        // Arrange
+        await ClearCategoryTable();
+        var ids = await PopulateCategoryTableByFakeData();
+
+        // Act
+        var deletedCategory = await _categoryRepository.DeleteAsync(ids[0]);
+
+        // Assert
+        Assert.Equal(ids[0], deletedCategory.Id);
+        Assert.Equal(_fakeCategories[0].Name, deletedCategory.Name);
+        Assert.Equal(_fakeCategories[0].Description, deletedCategory.Description);
+    }
+
+    [Fact]
+    public async void DeleteAsync_NonExistingCategory_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        await ClearCategoryTable();
+        var ids = await PopulateCategoryTableByFakeData();
+
+        // Act
+        var action = async () => await _categoryRepository.DeleteAsync(ids.Last() + 1);
+
+        // Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(action);
+    }
 }
