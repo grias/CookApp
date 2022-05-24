@@ -19,7 +19,6 @@ public class RecipeRepository : IRecipeRepository
 
     public RecipeRepository(string connectionString)
     {
-        // "Server=ALEX-LAPTOP;Database=CookApp.CookBookDb;Trusted_Connection=True;,DB_TYPE=MSSQL"
         _connectionString = connectionString;
     }
 
