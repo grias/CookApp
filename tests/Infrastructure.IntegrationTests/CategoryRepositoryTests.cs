@@ -171,9 +171,9 @@ public class CategoryRepositoryTests
     {
         // Arrange
         await ClearCategoryTable();
+        var category = new NewCategory("CorrectName", "CorrectDescription");
 
         // Act
-        var category = new NewCategory("CorrectName", "CorrectDescription");
         var insertedCategory = await _categoryRepository.InsertAsync(category);
 
         // Assert
@@ -186,9 +186,10 @@ public class CategoryRepositoryTests
     {
         // Arrange
         await ClearCategoryTable();
+        var category = new NewCategory("CorrectName", "CorrectDescription");
+
 
         // Act
-        var category = new NewCategory("CorrectName", "CorrectDescription");
         await _categoryRepository.InsertAsync(category);
 
         // Assert
@@ -206,9 +207,9 @@ public class CategoryRepositoryTests
         // Arrange
         await ClearCategoryTable();
         await PopulateCategoryTableByFakeData();
+        var category = new NewCategory(_fakeCategories[0].Name, "CorrectDescription");
 
         // Act
-        var category = new NewCategory(_fakeCategories[0].Name, "CorrectDescription");
         var action = async () => await _categoryRepository.InsertAsync(category);
 
         // Assert
@@ -221,9 +222,9 @@ public class CategoryRepositoryTests
         // Arrange
         await ClearCategoryTable();
         var ids = await PopulateCategoryTableByFakeData();
+        var categoryUpdate = new Category(ids[0], "CorrectName", "CorrectDescription");
 
         // Act
-        var categoryUpdate = new Category(ids[0], "CorrectName", "CorrectDescription");
         await _categoryRepository.UpdateAsync(categoryUpdate);
 
         // Assert
@@ -242,9 +243,9 @@ public class CategoryRepositoryTests
         // Arrange
         await ClearCategoryTable();
         var ids = await PopulateCategoryTableByFakeData();
+        var categoryUpdate = new Category(ids[0], "CorrectName", "CorrectDescription");
 
         // Act
-        var categoryUpdate = new Category(ids[0], "CorrectName", "CorrectDescription");
         var updatedCategory = await _categoryRepository.UpdateAsync(categoryUpdate);
 
         // Assert
@@ -259,9 +260,9 @@ public class CategoryRepositoryTests
         // Arrange
         await ClearCategoryTable();
         var ids = await PopulateCategoryTableByFakeData();
+        var categoryUpdate = new Category(ids.Last() + 1, "CorrectName", "CorrectDescription");
 
         // Act
-        var categoryUpdate = new Category(ids.Last() + 1, "CorrectName", "CorrectDescription");
         var action = async () => await _categoryRepository.UpdateAsync(categoryUpdate);
 
         // Assert
@@ -274,9 +275,9 @@ public class CategoryRepositoryTests
         // Arrange
         await ClearCategoryTable();
         var ids = await PopulateCategoryTableByFakeData();
+        var categoryUpdate = new Category(ids[0], _fakeCategories[1].Name, "CorrectDescription");
 
         // Act
-        var categoryUpdate = new Category(ids[0], _fakeCategories[1].Name, "CorrectDescription");
         var action = async () => await _categoryRepository.UpdateAsync(categoryUpdate);
 
         // Assert
