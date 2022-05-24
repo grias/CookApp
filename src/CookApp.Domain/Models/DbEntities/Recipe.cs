@@ -14,10 +14,16 @@ public class Recipe : EntityBase
 
     public string Process { get; init; }
 
-    public Recipe(int id, string name, string description, string process) : base(id)
+    public DateTime CreatedDate { get; init; }
+
+    public DateTime ModifiedDate { get; init; }
+
+    public Recipe(int id, string name, string description, string process, DateTime createdDate, DateTime modifiedDate) : base(id)
     {
         Name = name;
         Description = description;
         Process = process;
+        CreatedDate = createdDate;
+        ModifiedDate = modifiedDate;
     }
 }
