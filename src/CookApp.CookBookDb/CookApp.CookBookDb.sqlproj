@@ -88,5 +88,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CookApp.CookBookDbTest.publish.xml" />
+    <None Include="CookApp.CookBookDb.publish.xml" />
   </ItemGroup>
 </Project>
