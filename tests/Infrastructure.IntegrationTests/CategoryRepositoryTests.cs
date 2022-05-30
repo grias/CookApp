@@ -171,7 +171,7 @@ public class CategoryRepositoryTests
     {
         // Arrange
         await ClearCategoryTable();
-        var category = new NewCategory("CorrectName", "CorrectDescription");
+        var category = new CategoryCreationData("CorrectName", "CorrectDescription");
 
         // Act
         var insertedCategory = await _categoryRepository.InsertAsync(category);
@@ -186,7 +186,7 @@ public class CategoryRepositoryTests
     {
         // Arrange
         await ClearCategoryTable();
-        var category = new NewCategory("CorrectName", "CorrectDescription");
+        var category = new CategoryCreationData("CorrectName", "CorrectDescription");
 
 
         // Act
@@ -207,7 +207,7 @@ public class CategoryRepositoryTests
         // Arrange
         await ClearCategoryTable();
         await PopulateCategoryTableByFakeData();
-        var category = new NewCategory(_fakeCategories[0].Name, "CorrectDescription");
+        var category = new CategoryCreationData(_fakeCategories[0].Name, "CorrectDescription");
 
         // Act
         var action = async () => await _categoryRepository.InsertAsync(category);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CookApp.Domain.Models.CreatedEntities;
 
-public class NewRecipe
+public class RecipeCreationData
 {
     public string Name { get; init; }
 
@@ -14,7 +14,7 @@ public class NewRecipe
 
     public string Process { get; init; }
 
-    public NewRecipe(string name, string process, string description = "")
+    public RecipeCreationData(string name, string process, string description = "")
     {
         Name = name;
         Process = process;

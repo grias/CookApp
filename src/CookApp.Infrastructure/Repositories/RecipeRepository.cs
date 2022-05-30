@@ -46,7 +46,7 @@ public class RecipeRepository : IRecipeRepository
         return db.QueryAsync<Recipe>("spRecipe_GetPageByCategoryId", new { CategoryId = categoryId, pagination.PageNumber, pagination.PageSize }, commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<Recipe> InsertAsync(NewRecipe newRecipe)
+    public async Task<Recipe> InsertAsync(RecipeCreationData newRecipe)
     {
         var parameters = new DynamicParameters();
         parameters.Add("Name", newRecipe.Name);

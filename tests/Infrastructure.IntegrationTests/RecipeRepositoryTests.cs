@@ -209,7 +209,7 @@ public class RecipeRepositoryTests
     {
         // Arrange
         await ClearRecipeTable();
-        var newRecipe = new NewRecipe("Valid name", "Valid cooking process");
+        var newRecipe = new RecipeCreationData("Valid name", "Valid cooking process");
 
         // Act
         await _recipeRepository.InsertAsync(newRecipe);
@@ -227,7 +227,7 @@ public class RecipeRepositoryTests
     {
         // Arrange
         await ClearRecipeTable();
-        var newRecipe = new NewRecipe("Valid name", "Valid cooking process");
+        var newRecipe = new RecipeCreationData("Valid name", "Valid cooking process");
 
 
         // Act
