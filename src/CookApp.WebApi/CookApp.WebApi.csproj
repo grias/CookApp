@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CookApp.Domain\CookApp.Domain.csproj" />
+    <ProjectReference Include="..\CookApp.Infrastructure\CookApp.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,7 @@
 using CookApp.Domain.Core;
+using CookApp.Domain.DataAccessInterfaces;
+using CookApp.Infrastructure.Repositories;
+using CookApp.Domain.UtilityClasses;
 
 namespace CookApp.WebApi
 {
@@ -15,7 +18,13 @@ namespace CookApp.WebApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            string connectionString = GetConnectionStringFromEnvironmentVariable();
+
             builder.Services.AddTransient<IRecipeCollection, RecipeCollection>();
+            builder.Services.AddTransient<IRecipeRepository>(sp => new RecipeRepository(connectionString));
+            builder.Services.AddTransient<ICategoryRepository>(sp => new CategoryRepository(connectionString));
+            builder.Services.AddTransient<IDataMapper, DataMapper>();
+
 
             var app = builder.Build();
 
@@ -26,13 +35,24 @@ namespace CookApp.WebApi
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            if (app.Environment.IsProduction())
+            {
+                app.UseHttpsRedirection();
+            }
 
             app.UseAuthorization();
 
             app.MapControllers();
 
             app.Run();
+        }
+
+        private static string GetConnectionStringFromEnvironmentVariable()
+        {
+            var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+            if (string.IsNullOrEmpty(connectionString))
+                throw new Exception("Can't find CONNECTION_STRING env var");
+            return connectionString;
         }
     }
 }
