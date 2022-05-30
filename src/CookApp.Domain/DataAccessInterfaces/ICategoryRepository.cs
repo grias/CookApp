@@ -12,7 +12,7 @@ namespace CookApp.Domain.DataAccessInterfaces;
 
 public interface ICategoryRepository : IRepositoryBase<Category>
 {
-    Task<Category> InsertAsync(CategoryCreationData newCategory);
+    Task<Category> InsertAsync(CategoryCreationDto newCategory);
 
     Task<IEnumerable<Category>> GetCategoriesOfRecipeByIdAsync(int recipeId);
 }

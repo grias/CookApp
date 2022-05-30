@@ -6,15 +6,20 @@ using System.Threading.Tasks;
 
 namespace CookApp.Domain.Models.CreatedEntities;
 
-public class CategoryCreationData
+public class CategoryCreationDto
 {
     public string Name { get; init; }
 
-    public string Description { get; init; }
+    public string? Description { get; init; }
 
-    public CategoryCreationData(string name, string description = "")
+    public CategoryCreationDto(string name, string description)
     {
         Name = name;
         Description = description;
+    }
+
+    public CategoryCreationDto(string name)
+    {
+        Name = name;
     }
 }

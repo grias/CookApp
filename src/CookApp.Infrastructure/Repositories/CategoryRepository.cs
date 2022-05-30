@@ -39,7 +39,7 @@ public class CategoryRepository : ICategoryRepository
         return await db.QueryAsync<Category>("spCategory_GetPage", new { pagination.PageNumber, pagination.PageSize }, commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<Category> InsertAsync(CategoryCreationData newCategory)
+    public async Task<Category> InsertAsync(CategoryCreationDto newCategory)
     {
         var parameters = new DynamicParameters();
         parameters.Add("Name", newCategory.Name);

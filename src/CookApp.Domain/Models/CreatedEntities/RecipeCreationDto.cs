@@ -6,18 +6,23 @@ using System.Threading.Tasks;
 
 namespace CookApp.Domain.Models.CreatedEntities;
 
-public class RecipeCreationData
+public class RecipeCreationDto
 {
     public string Name { get; init; }
 
-    public string Description { get; init; }
+    public string? Description { get; init; }
 
-    public string Process { get; init; }
+    public string? Process { get; init; }
 
-    public RecipeCreationData(string name, string process, string description = "")
+    public RecipeCreationDto(string name, string process, string description)
     {
         Name = name;
         Process = process;
         Description = description;
+    }
+
+    public RecipeCreationDto(string name)
+    {
+        Name = name;
     }
 }

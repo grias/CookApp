@@ -66,7 +66,7 @@ public class RecipeCollection : IRecipeCollection
         return await Task.WhenAll(briefRecepies.Select(recipe => CreateBriefRecipeWithCategoriesAsync(recipe)));
     }
 
-    public async Task<Recipe> AddRecipeAsync(RecipeCreationData newRecipe) => await _recipeRepository.InsertAsync(newRecipe);
+    public async Task<Recipe> AddRecipeAsync(RecipeCreationDto newRecipe) => await _recipeRepository.InsertAsync(newRecipe);
 
     public async Task<Recipe> UpdateRecipeAsync(Recipe recipe) => await _recipeRepository.UpdateAsync(recipe);
 

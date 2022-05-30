@@ -12,7 +12,7 @@ namespace CookApp.Domain.DataAccessInterfaces;
 
 public interface IRecipeRepository : IRepositoryBase<Recipe>
 {
-    Task<Recipe> InsertAsync(RecipeCreationData newRecipe);
+    Task<Recipe> InsertAsync(RecipeCreationDto newRecipe);
 
     Task<IEnumerable<Recipe>> GetPageByCategoryIdAsync(int categoryId, Pagination pagination);
 
