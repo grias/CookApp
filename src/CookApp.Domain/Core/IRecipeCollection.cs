@@ -12,7 +12,7 @@ namespace CookApp.Domain.Core;
 
 public interface IRecipeCollection
 {
-    public Task<RecipeWithBriefCategories> GetRecipeWithCategoriesAsync(int recipeId);
+    public Task<RecipeWithBriefCategories?> GetRecipeWithCategoriesAsync(int recipeId);
 
     public Task<IEnumerable<BriefRecipeWithBriefCategories>> GetBriefRecipesWithBriefCategoriesAsync(Pagination pagination);
 
@@ -24,7 +24,7 @@ public interface IRecipeCollection
 
     public Task<Recipe> DeleteRecipeAsync(int recipeId);
 
-    public Task<RecipeWithBriefCategories> AddRecipeToCategoryAsync(int recipeId, int categoryId);
+    public Task<RecipeWithBriefCategories?> AddRecipeToCategoryAsync(int recipeId, int categoryId);
 
-    public Task<RecipeWithBriefCategories> RemoveRecipeFromCategoryAsync(int recipeId, int categoryId);
+    public Task<RecipeWithBriefCategories?> RemoveRecipeFromCategoryAsync(int recipeId, int categoryId);
 }

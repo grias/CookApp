@@ -24,9 +24,14 @@ public class RecipeCollection : IRecipeCollection
         _dataMapper = dataMapper;
     }
 
-    public async Task<RecipeWithBriefCategories> GetRecipeWithCategoriesAsync(int recipeId)
+    public async Task<RecipeWithBriefCategories?> GetRecipeWithCategoriesAsync(int recipeId)
     {
         var recipe = await _recipeRepository.GetSingleOrDefaultAsync(recipeId);
+        if (recipe is null)
+        {
+            return null;
+        }
+        
         var categories = await _categoryRepository.GetCategoriesOfRecipeByIdAsync(recipeId);
 
         return new RecipeWithBriefCategories(recipe, _dataMapper.ToBrief(categories));
@@ -67,13 +72,13 @@ public class RecipeCollection : IRecipeCollection
 
     public async Task<Recipe> DeleteRecipeAsync(int recipeId) => await _recipeRepository.DeleteAsync(recipeId);
 
-    public async Task<RecipeWithBriefCategories> AddRecipeToCategoryAsync(int recipeId, int categoryId)
+    public async Task<RecipeWithBriefCategories?> AddRecipeToCategoryAsync(int recipeId, int categoryId)
     {
         await _recipeRepository.AddRecipeToCategoryAsync(recipeId, categoryId);
         return await GetRecipeWithCategoriesAsync(recipeId);
     }
 
-    public async Task<RecipeWithBriefCategories> RemoveRecipeFromCategoryAsync(int recipeId, int categoryId)
+    public async Task<RecipeWithBriefCategories?> RemoveRecipeFromCategoryAsync(int recipeId, int categoryId)
     {
         await _recipeRepository.RemoveRecipeFromCategoryAsync(recipeId, categoryId);
         return await GetRecipeWithCategoriesAsync(recipeId);
