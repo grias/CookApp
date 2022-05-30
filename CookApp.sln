@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CookApp.Infrastructure", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.IntegrationTests", "tests\Infrastructure.IntegrationTests\Infrastructure.IntegrationTests.csproj", "{42E379CD-512C-46C5-8319-74F62999DE45}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookApp.WebApi", "src\CookApp.WebApi\CookApp.WebApi.csproj", "{89D100D0-DE0B-4277-BDD7-813A550B31CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{42E379CD-512C-46C5-8319-74F62999DE45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42E379CD-512C-46C5-8319-74F62999DE45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42E379CD-512C-46C5-8319-74F62999DE45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89D100D0-DE0B-4277-BDD7-813A550B31CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89D100D0-DE0B-4277-BDD7-813A550B31CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89D100D0-DE0B-4277-BDD7-813A550B31CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89D100D0-DE0B-4277-BDD7-813A550B31CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
