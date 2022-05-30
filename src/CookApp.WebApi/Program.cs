@@ -1,3 +1,5 @@
+using CookApp.Domain.Core;
+
 namespace CookApp.WebApi
 {
     public class Program
@@ -12,6 +14,8 @@ namespace CookApp.WebApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddTransient<IRecipeCollection, RecipeCollection>();
 
             var app = builder.Build();
 
