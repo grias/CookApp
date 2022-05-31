@@ -15,7 +15,7 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "CONNECTION_STRING": "Data Source=ALEX-LAPTOP;Database=CookApp.CookBookDbTest;Integrated Security=True;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+        "CONNECTION_STRING": "Data Source=ALEX-LAPTOP;Database=CookApp.CookBookDb;Integrated Security=True;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
       },
       "applicationUrl": "https://localhost:7217;http://localhost:5217",
       "dotnetRunMessages": true

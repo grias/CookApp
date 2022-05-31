@@ -2,6 +2,7 @@ using CookApp.Domain.Core;
 using CookApp.Domain.DataAccessInterfaces;
 using CookApp.Infrastructure.Repositories;
 using CookApp.Domain.UtilityClasses;
+using AutoMapper;
 
 namespace CookApp.WebApi
 {
@@ -25,6 +26,7 @@ namespace CookApp.WebApi
             builder.Services.AddTransient<ICategoryRepository>(sp => new CategoryRepository(connectionString));
             builder.Services.AddTransient<IDataMapper, DataMapper>();
 
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             var app = builder.Build();
 
