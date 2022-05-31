@@ -17,49 +17,23 @@ public class RecipeRepositoryTests
 {
     private readonly string _connectionString;
 
+    private readonly FakeData _fd;
+
     private readonly IRecipeRepository _recipeRepository;
 
     public RecipeRepositoryTests()
     {
         _connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") ?? "";
         _recipeRepository = new RecipeRepository(_connectionString);
-    }
-
-    private readonly List<Recipe> _fakeRecipes = new List<Recipe>()
-    {       
-        new Recipe(-1, "Coconut cocktail", "Tasty Coconut cocktail", "How to cook Coconut cocktail", DateTime.Now, DateTime.Now),
-        new Recipe(-1, "Ecler", "Tasty ecler", "How to cook ecler", DateTime.Now, DateTime.Now),
-        new Recipe(-1, "Beef stew", "Tasty beef stew", "How to cook beef stew", DateTime.Now, DateTime.Now),
-        new Recipe(-1, "Dumplings", "Tasty dumplings", "How to cook dumplings", DateTime.Now, DateTime.Now),
-        new Recipe(-1, "Apple pie", "Tasty apple pie", "How to cook apple pie", DateTime.Now, DateTime.Now),
-    };
-
-    public async Task ClearRecipeTable()
-    {
-        using var db = new SqlConnection(_connectionString);
-        await db.ExecuteAsync("DELETE FROM Recipe");
-    }
-
-    public async Task<List<int>> PopulateRecipeTableByFakeData()
-    {
-        using var db = new SqlConnection(_connectionString);
-        var ids = new List<int>();
-        foreach (var recipe in _fakeRecipes)
-        {
-            var id = await db.QueryFirstOrDefaultAsync<int>(
-                "INSERT INTO Recipe (Name, Description, Process) VALUES (@Name, @Description, @Process); SELECT CAST(SCOPE_IDENTITY() as int)",
-                recipe);
-            ids.Add(id);
-        }
-        return ids;
+        _fd = new FakeData(_connectionString);
     }
 
     [Fact]
     public async void GetSingleOrDefaultAsync_ValidId_ReturnsRecipe()
     {
         // Arrange
-        await ClearRecipeTable();
-        var ids = await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        var ids = await _fd.PopulateRecipeTableByFakeData();
         var id = ids[0];
 
         // Act
@@ -68,17 +42,17 @@ public class RecipeRepositoryTests
         // Assert
         Assert.NotNull(recipe);
         Assert.Equal(id, recipe!.Id);
-        Assert.Equal(_fakeRecipes[0].Name, recipe.Name);
-        Assert.Equal(_fakeRecipes[0].Description, recipe.Description);
-        Assert.Equal(_fakeRecipes[0].Process, recipe.Process);
+        Assert.Equal(_fd.FakeRecipes[0].Name, recipe.Name);
+        Assert.Equal(_fd.FakeRecipes[0].Description, recipe.Description);
+        Assert.Equal(_fd.FakeRecipes[0].Process, recipe.Process);
     }
 
     [Fact]
     public async void GetSingleOrDefaultAsync_NonexistentId_ReturnsNull()
     {
         // Arrange
-        await ClearRecipeTable();
-        var ids = await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        var ids = await _fd.PopulateRecipeTableByFakeData();
         var nonexistentId = ids.Last() + 1;
 
         // Act
@@ -92,8 +66,8 @@ public class RecipeRepositoryTests
     public async void GetSingleOrDefaultAsync_IncorrectId_ReturnsNull()
     {
         // Arrange
-        await ClearRecipeTable();
-        await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        await _fd.PopulateRecipeTableByFakeData();
         var incorrectId = -1;
 
         // Act
@@ -107,8 +81,8 @@ public class RecipeRepositoryTests
     public async void GetSingleAsync_ValidId_ReturnsRecipe()
     {
         // Arrange
-        await ClearRecipeTable();
-        var ids = await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        var ids = await _fd.PopulateRecipeTableByFakeData();
         var id = ids[0];
 
         // Act
@@ -117,17 +91,17 @@ public class RecipeRepositoryTests
         // Assert
         Assert.NotNull(recipe);
         Assert.Equal(id, recipe!.Id);
-        Assert.Equal(_fakeRecipes[0].Name, recipe.Name);
-        Assert.Equal(_fakeRecipes[0].Description, recipe.Description);
-        Assert.Equal(_fakeRecipes[0].Process, recipe.Process);
+        Assert.Equal(_fd.FakeRecipes[0].Name, recipe.Name);
+        Assert.Equal(_fd.FakeRecipes[0].Description, recipe.Description);
+        Assert.Equal(_fd.FakeRecipes[0].Process, recipe.Process);
     }
 
     [Fact]
     public async void GetSingleAsync_NonexistentId_ThrowsException()
     {
         // Arrange
-        await ClearRecipeTable();
-        var ids = await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        var ids = await _fd.PopulateRecipeTableByFakeData();
         var nonexistentId = ids.Last() + 1;
 
         // Act
@@ -142,8 +116,8 @@ public class RecipeRepositoryTests
     public async void GetSingleAsync_IncorrectId_ThrowsException()
     {
         // Arrange
-        await ClearRecipeTable();
-        await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        await _fd.PopulateRecipeTableByFakeData();
         var incorrectId = -1;
 
         // Act
@@ -158,8 +132,8 @@ public class RecipeRepositoryTests
     public async void GetPageAsync_All_ReturnsAllRecipes()
     {
         // Arrange
-        await ClearRecipeTable();
-        var ids = await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        var ids = await _fd.PopulateRecipeTableByFakeData();
         var all = Pagination.All;
 
         // Act
@@ -167,15 +141,15 @@ public class RecipeRepositoryTests
 
         // Assert
         Assert.NotNull(recipes);
-        Assert.Equal(_fakeRecipes.Count, recipes.Count);
+        Assert.Equal(_fd.FakeRecipes.Count, recipes.Count);
     }
 
     [Fact]
     public async void GetPageAsync_SecondPage_ReturnsCorrectRecipes()
     {
         // Arrange
-        await ClearRecipeTable();
-        await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        await _fd.PopulateRecipeTableByFakeData();
         var secondPage = new Pagination(2, 2);
         var correctRecipes = (await _recipeRepository.GetPageAsync(Pagination.All))
             .OrderByDescending(r => r.ModifiedDate).Skip(2).Take(2).ToList();
@@ -193,8 +167,8 @@ public class RecipeRepositoryTests
     public async void GetPageAsync_NonexistentPage_ReturnsEmptyCollection()
     {
         // Arrange
-        await ClearRecipeTable();
-        var ids = await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        var ids = await _fd.PopulateRecipeTableByFakeData();
         var nonexistentPage = new Pagination(ids.Count, 2);
 
         // Act
@@ -208,8 +182,8 @@ public class RecipeRepositoryTests
     public async void InsertAsync_ValidData_InsertsRecipe()
     {
         // Arrange
-        await ClearRecipeTable();
-        var newRecipe = new RecipeCreationDto("Valid name", "Valid cooking process");
+        await _fd.ClearAllTables();
+        var newRecipe = new RecipeCreationDto("Valid name") { Process = "Valid cooking process" };
 
         // Act
         await _recipeRepository.InsertAsync(newRecipe);
@@ -226,8 +200,8 @@ public class RecipeRepositoryTests
     public async void InsertAsync_ValidData_ReturnsInsertedRecipe()
     {
         // Arrange
-        await ClearRecipeTable();
-        var newRecipe = new RecipeCreationDto("Valid name", "Valid cooking process");
+        await _fd.ClearAllTables();
+        var newRecipe = new RecipeCreationDto("Valid name") { Process = "Valid cooking process" };
 
 
         // Act
@@ -243,8 +217,8 @@ public class RecipeRepositoryTests
     public async void UpdateAsync_ExistingRecipe_UpdatesRecipe()
     {
         // Arrange
-        await ClearRecipeTable();
-        var ids = await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        var ids = await _fd.PopulateRecipeTableByFakeData();
         var id = ids[0];
         var arbitraryDateTime = DateTime.Now;
         var updatedRecipe = new Recipe(id, "Updated name", "Updated cooking process", "Updated process", arbitraryDateTime, arbitraryDateTime);
@@ -267,8 +241,8 @@ public class RecipeRepositoryTests
     public async void UpdateAsync_ExistingRecipe_ReturnsUpdatedRecipe()
     {
         // Arrange
-        await ClearRecipeTable();
-        var ids = await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        var ids = await _fd.PopulateRecipeTableByFakeData();
         var id = ids[0];
         var arbitraryDateTime = DateTime.Now;
         var updatedRecipe = new Recipe(id, "Updated name", "Updated cooking process", "Updated process", arbitraryDateTime, arbitraryDateTime);
@@ -287,8 +261,8 @@ public class RecipeRepositoryTests
     public async void UpdateAsync_NonexistingRecipe_ThrowsInvalidOperationException()
     {
         // Arrange
-        await ClearRecipeTable();
-        var ids = await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        var ids = await _fd.PopulateRecipeTableByFakeData();
         var id = ids.Last() + 1;
         var arbitraryDateTime = DateTime.Now;
         var updatedRecipe = new Recipe(id, "Updated name", "Updated cooking process", "Updated process", arbitraryDateTime, arbitraryDateTime);
@@ -305,8 +279,8 @@ public class RecipeRepositoryTests
     public async void DeleteAsync_ExistingRecipe_DeletesRecipe()
     {
         // Arrange
-        await ClearRecipeTable();
-        var ids = await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        var ids = await _fd.PopulateRecipeTableByFakeData();
         var id = ids[0];
 
         // Act
@@ -324,8 +298,8 @@ public class RecipeRepositoryTests
     public async void DeleteAsync_ExistingRecipe_ReturnsDeletedRecipe()
     {
         // Arrange
-        await ClearRecipeTable();
-        var ids = await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        var ids = await _fd.PopulateRecipeTableByFakeData();
         var id = ids[0];
 
         // Act
@@ -340,8 +314,8 @@ public class RecipeRepositoryTests
     public async void DeleteAsync_NonexistingRecipe_ThrowsInvalidOperationException()
     {
         // Arrange
-        await ClearRecipeTable();
-        var ids = await PopulateRecipeTableByFakeData();
+        await _fd.ClearAllTables();
+        var ids = await _fd.PopulateRecipeTableByFakeData();
         var id = ids.Last() + 1;
 
         // Act
