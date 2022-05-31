@@ -47,7 +47,7 @@ public class RecipeController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Recipe))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<Recipe>> CreateRecipe([FromBody] RecipeCreationRequest recipe)
+    public async Task<ActionResult<Recipe>> Create([FromBody] RecipeCreationRequest recipe)
     {
         if (!ModelState.IsValid)
         {
